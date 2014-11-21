@@ -73,4 +73,8 @@ public class BoundingBox implements Parcelable {
         return coordinates;
     }
 
+    public double[] toArray() {
+        return this.mStorage;
+    }
+
 }
