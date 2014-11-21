@@ -1,5 +1,6 @@
 package com.cocoahero.android.geojson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +21,8 @@ public class Feature extends GeoJSONObject {
 
     private static final String JSON_PROPERTIES = "properties";
 
+    private static final String JSON_BOUNDING_BOX = "bbox";
+
     // ------------------------------------------------------------------------
     // Instance Variables
     // ------------------------------------------------------------------------
@@ -29,6 +32,8 @@ public class Feature extends GeoJSONObject {
     private Geometry mGeometry;
 
     private JSONObject mProperties;
+
+    private BoundingBox mBoundingBox;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -49,6 +54,11 @@ public class Feature extends GeoJSONObject {
         }
 
         this.mProperties = json.optJSONObject(JSON_PROPERTIES);
+
+        JSONArray bbox = json.optJSONArray(JSON_BOUNDING_BOX);
+        if (bbox != null) {
+            this.mBoundingBox = new BoundingBox(bbox);
+        }
     }
 
     public Feature(Geometry geometry) {
@@ -99,6 +109,14 @@ public class Feature extends GeoJSONObject {
         this.mProperties = properties;
     }
 
+    public BoundingBox getBoundingBox() {
+        return this.mBoundingBox;
+    }
+
+    public void setBoundingBox(BoundingBox bbox) {
+        this.mBoundingBox = bbox;
+    }
+
     @Override
     public String getType() {
         return GeoJSON.TYPE_FEATURE;
@@ -122,6 +140,10 @@ public class Feature extends GeoJSONObject {
         }
         else {
             json.put(JSON_PROPERTIES, JSONObject.NULL);
+        }
+
+        if (this.mBoundingBox != null) {
+            json.put(JSON_BOUNDING_BOX, mBoundingBox.toJSON());
         }
 
         return json;

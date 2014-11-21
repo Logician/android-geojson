@@ -18,11 +18,15 @@ public class FeatureCollection extends GeoJSONObject {
 
     public static final String JSON_FEATURES = "features";
 
+    private static final String JSON_BOUNDING_BOX = "bbox";
+
     // ------------------------------------------------------------------------
     // Instance Variables
     // ------------------------------------------------------------------------
 
     private final List<Feature> mFeatures = new ArrayList<Feature>();
+
+    private BoundingBox mBoundingBox;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -43,6 +47,11 @@ public class FeatureCollection extends GeoJSONObject {
                     this.mFeatures.add(new Feature(featureJSON));
                 }
             }
+        }
+
+        JSONArray bbox = json.optJSONArray(JSON_BOUNDING_BOX);
+        if (bbox != null) {
+            this.mBoundingBox = new BoundingBox(bbox);
         }
     }
 
@@ -85,6 +94,14 @@ public class FeatureCollection extends GeoJSONObject {
         }
     }
 
+    public BoundingBox getBoundingBox() {
+        return this.mBoundingBox;
+    }
+
+    public void setBoundingBox(BoundingBox bbox) {
+        this.mBoundingBox = bbox;
+    }
+
     @Override
     public String getType() {
         return GeoJSON.TYPE_FEATURE_COLLECTION;
@@ -100,6 +117,10 @@ public class FeatureCollection extends GeoJSONObject {
         }
 
         json.put(JSON_FEATURES, features);
+
+        if (this.mBoundingBox != null) {
+            json.put(JSON_BOUNDING_BOX, mBoundingBox.toJSON());
+        }
 
         return json;
     }
