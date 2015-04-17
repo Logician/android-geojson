@@ -19,8 +19,6 @@ public class Position implements Parcelable {
 
     private static final int LAT_IDX = 1;
 
-    private static final int ALT_IDX = 2;
-
     // ------------------------------------------------------------------------
     // Instance Variables
     // ------------------------------------------------------------------------
@@ -34,36 +32,18 @@ public class Position implements Parcelable {
     public Position(JSONArray array) {
         this.mStorage[LON_IDX] = array.optDouble(LON_IDX, 0);
         this.mStorage[LAT_IDX] = array.optDouble(LAT_IDX, 0);
-        this.mStorage[ALT_IDX] = array.optDouble(ALT_IDX, 0);
     }
 
     public Position(double[] array) {
-        if (array.length == 2) {
+        if (array.length >= 2) {
             this.mStorage[LON_IDX] = array[LON_IDX];
             this.mStorage[LAT_IDX] = array[LAT_IDX];
-        }
-        else if (array.length == 3) {
-            this.mStorage[LON_IDX] = array[LON_IDX];
-            this.mStorage[LAT_IDX] = array[LAT_IDX];
-            this.mStorage[ALT_IDX] = array[ALT_IDX];
         }
     }
 
     public Position(double latitude, double longitude) {
         this.mStorage[LAT_IDX] = latitude;
         this.mStorage[LON_IDX] = longitude;
-    }
-
-    public Position(double latitude, double longitude, double altitude) {
-        this.mStorage[LAT_IDX] = latitude;
-        this.mStorage[LON_IDX] = longitude;
-        this.mStorage[ALT_IDX] = altitude;
-    }
-
-    public Position(Location location) {
-        this.mStorage[LAT_IDX] = location.getLatitude();
-        this.mStorage[LON_IDX] = location.getLongitude();
-        this.mStorage[ALT_IDX] = location.getAltitude();
     }
 
     private Position(Parcel parcel) {
@@ -116,32 +96,13 @@ public class Position implements Parcelable {
         this.mStorage[LON_IDX] = longitude;
     }
 
-    public double getAltitude() {
-        return this.mStorage[ALT_IDX];
-    }
-
-    public void setAltitude(double altitude) {
-        this.mStorage[ALT_IDX] = altitude;
-    }
-
     public JSONArray toJSON() throws JSONException {
         JSONArray coordinates = new JSONArray();
 
         coordinates.put(LAT_IDX, this.getLatitude());
         coordinates.put(LON_IDX, this.getLongitude());
-        coordinates.put(ALT_IDX, this.getAltitude());
 
         return coordinates;
-    }
-
-    public Location toLocation() {
-        Location location = new Location("GeoJSON");
-
-        location.setLatitude(this.getLatitude());
-        location.setLongitude(this.getLongitude());
-        location.setAltitude(this.getAltitude());
-
-        return location;
     }
 
     public double[] toArray() {

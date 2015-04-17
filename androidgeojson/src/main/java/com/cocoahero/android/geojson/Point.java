@@ -41,10 +41,6 @@ public class Point extends Geometry {
         this.mPosition = new Position(latitude, longitude);
     }
 
-    public Point(double latitude, double longitude, double altitude) {
-        this.mPosition = new Position(latitude, longitude, altitude);
-    }
-
     // ------------------------------------------------------------------------
     // Parcelable Interface
     // ------------------------------------------------------------------------
